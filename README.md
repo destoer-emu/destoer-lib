@@ -1,0 +1,1 @@
+small library for personal projects - BSD 3 clause license
