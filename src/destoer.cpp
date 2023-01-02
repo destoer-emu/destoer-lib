@@ -139,6 +139,7 @@ void log(b32 cond,const char *fmt, ...)
 }
 
 
+#include "stl-helpers.cpp"
 #include "alloc.cpp"
 #include "array.cpp"
 #include "string.cpp"

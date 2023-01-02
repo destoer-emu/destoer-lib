@@ -2,6 +2,9 @@
 #include <filesystem>
 #include <optional>
 #include <chrono>
+#include <string>
+#include <vector>
+#include <fstream>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
