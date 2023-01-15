@@ -81,6 +81,40 @@ u32 popcount(u32 v)
     return count;
 }
 
+// TODO: make this use compilier builtins where avaible
+template<typename T>
+inline T bswap(T x)
+{
+	unsigned char *buf = reinterpret_cast<unsigned char *>(&x);
+	for(size_t i = 0; i < sizeof(x) / 2; i++)
+	{
+		std::swap(buf[i],buf[sizeof(x)-i-1]);
+	}
+	memcpy(&x,buf,sizeof(x));
+	return x;
+}
+
+//https://stackoverflow.com/questions/42534749/signed-extension-from-24-bit-to-32-bit-in-c
+template<typename T>
+T sign_extend(T x, int b)
+{
+	T res = 1;
+	res <<= b - 1;
+	return (x ^ res) - res;
+}
+
+// sign extend types 
+// NOTE: works even if input types are unsigned
+template<typename OUT,typename IN>
+inline OUT sign_extend_type(IN x)
+{
+    using signed_type_in = typename std::make_signed<IN>::type;
+    const auto v = static_cast<signed_type_in>(x);
+
+    using signed_type_out = typename std::make_signed<OUT>::type;
+    return static_cast<OUT>(static_cast<signed_type_out>(v));
+}
+
 u32 max(u32 v1, u32 v2)
 {
     return v1 > v2? v1 : v2;
