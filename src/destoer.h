@@ -32,6 +32,7 @@ using b32 = bool;
 using b8 = bool;
 
 using f32 = float;
+using f64 = double;
 
 
 #define UNUSED(X) ((void)X)
