@@ -201,7 +201,9 @@ Array<char> read_file(const String &filename)
     // allocate an appriopately sized buffer
     // and read the whole file out
     resize(buf,len + 1);
-    fread(buf.data,len,1,fp);
+    u32 read = fread(buf.data,len,1,fp);
+    // silence nag
+    UNUSED(read);
 
     buf[len] = '\0';
 
