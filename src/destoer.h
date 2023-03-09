@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdarg.h>
+#include <limits.h>
 
 
 namespace destoer
