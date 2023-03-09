@@ -160,4 +160,11 @@ void* allocate(ArenaAllocator& allocator, u32 size);
 
 void print_line(const String& filename,u32 line);
 
+#include <bit-ops.inl>
+#include <stl-helpers.inl>
+
+#ifdef FORWARD_DEF_DESTOER_LIB
+    #include <forward_def.h>
+#endif
+
 }
