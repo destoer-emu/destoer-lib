@@ -44,7 +44,24 @@ bool string_equal(const String& str1, const String& str2);
 u32 hash_string(const String& str, u32 hash);
 String make_static_string(const char* str, u32 len);
 
+template<typename T1, typename T2>
+struct Pair
+{
+    Pair(T1 a1, T2 a2) : v1(a1), v2(a2)
+    {}
 
+    T1 v1;
+    T2 v2;
+};
+
+template<typename T1, typename T2>
+void tie(const Pair<T1,T2> &pair,T1 &v1, T2 &v2)
+{
+    v1 = pair.v1;
+    v2 = pair.v2;
+}
+
+// NOTE: this is designed as a 'view' string it never owns the memory it points to to
 struct String
 {
     String() {}

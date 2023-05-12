@@ -43,17 +43,17 @@ void print_line(const String& filename,u32 line)
 #include "hashtable.cpp"
 #include "heap_sort.cpp"
 
-// read entire file into a string
-Array<char> read_file(const String &filename)
+// read entire file into string buf
+Pair<StringBuffer,b32> read_str_buf(const String &filename)
 {
     FILE* fp = fopen(filename.buf,"rb");
 
-    Array<char> buf;
+    StringBuffer buf;
 
     // file is invalid dont bother
     if(!fp)
     {
-        return buf;
+        return Pair{buf,true};
     }
 
     // get the file len
@@ -64,14 +64,12 @@ Array<char> read_file(const String &filename)
     // allocate an appriopately sized buffer
     // and read the whole file out
     resize(buf,len + 1);
-    u32 read = fread(buf.data,len,1,fp);
-    // silence nag
-    UNUSED(read);
+    fread(buf.data,len,1,fp);
 
     buf[len] = '\0';
 
     fclose(fp);
-    return buf;
+    return Pair{buf,false};
 }
 
 }
