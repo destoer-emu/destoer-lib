@@ -30,7 +30,7 @@ using s32 = int32_t;
 using s64 = int64_t;
 
 using b32 = bool;
-using b8 = bool;
+using b8 = u8;
 
 using f32 = float;
 using f64 = double;

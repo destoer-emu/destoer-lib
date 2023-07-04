@@ -129,6 +129,12 @@ void destroy_arr(Array<T> &arr)
 }
 
 template<typename T>
+void clear_arr(Array<T>& arr)
+{
+    arr.size = 0;
+}
+
+template<typename T>
 void reserve_arena(ArenaAllocator& allocator,Array<T>& arr, u32 size)
 {
     const u32 free_size = arr.capacity - arr.size;
