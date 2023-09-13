@@ -193,6 +193,6 @@ String extract_path(const String& filename)
         return string_slice(filename,0,len);
     }
 
-    // otherwhise just return the string
-    return filename;
+    // otherwhise just return nothing
+    return make_static_string("",0);
 }
