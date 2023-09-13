@@ -170,3 +170,29 @@ bool contains_ext(const String& str)
 {   
     return strchr(str.buf,'.') != NULL;
 }    
+
+// NOTE: this function is in place
+String extract_path(const String& filename)
+{
+    // find last /
+    // and clip to it
+    const char* ptr = strrchr(filename.buf,'/');
+
+    if(ptr)
+    {
+        const u32 len = (ptr - filename.buf) + 1;
+        return string_slice(filename,0,len);
+    }
+
+    // if this fails clip to last '\'
+    ptr = strrchr(filename.buf,'\\');
+
+    if(ptr)
+    {
+        const u32 len = (ptr - filename.buf) + 1;
+        return string_slice(filename,0,len);
+    }
+
+    // otherwhise just return the string
+    return filename;
+}
