@@ -23,7 +23,7 @@ void destroy_table(HashTable<Key,T> &table)
 {
     for(u32 i = 0; i < count(table.buf); i++)
     {
-        Bucket<Key,T>& bucket = table.buf[i];
+        HashBucket<Key,T>& bucket = table.buf[i];
 
         for(u32 j = 0; j < count(bucket); j++)
         {
@@ -40,7 +40,7 @@ T* lookup(HashTable<Key,T> &table, const Key& key)
 {
     const u32 slot = hash_slot(count(table.buf),key);
 
-    Bucket<Key,T>& bucket = table.buf[slot];
+    HashBucket<Key,T>& bucket = table.buf[slot];
 
     
     for(u32 i = 0; i < count(bucket); i++)
@@ -64,12 +64,12 @@ bool contains(HashTable<Key,T> &table, const Key& key)
 template<typename Key,typename T>
 void rehash(HashTable<Key,T> &table, u32 table_size)
 {
-    Array<Bucket<Key,T>> buf_new;
+    Array<HashBucket<Key,T>> buf_new;
     resize(buf_new,table_size);
 
     for(u32 i = 0; i < count(table.buf); i++)
     {
-        const Bucket<Key,T>& bucket = table.buf[i];
+        const HashBucket<Key,T>& bucket = table.buf[i];
 
         for(u32 j = 0; j < count(bucket); j++)
         {
@@ -97,7 +97,7 @@ void add(HashTable<Key,T> &table, const Key& key, T v)
 
     const u32 slot = hash_slot(count(table.buf),key);
 
-    Bucket<Key,T>& bucket = table.buf[slot];
+    HashBucket<Key,T>& bucket = table.buf[slot];
 
     for(u32 i = 0; i < count(bucket); i++)
     {

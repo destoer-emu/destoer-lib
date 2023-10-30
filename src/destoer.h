@@ -132,7 +132,7 @@ struct HashNode
 
 
 template<typename Key,typename T>
-using Bucket = Array<HashNode<Key,T>>;
+using HashBucket = Array<HashNode<Key,T>>;
 
 template<typename Key,typename T>
 struct HashTable
@@ -140,7 +140,19 @@ struct HashTable
     u32 size = 0;
 
     // NOTE: Must be sized at a power of two
-    Array<Bucket<Key,T>> buf;
+    Array<HashBucket<Key,T>> buf;
+};
+
+template<typename T>
+using SetBucket = Array<T>;
+
+template<typename T>
+struct Set
+{
+    u32 size = 0;
+
+    // NOTE: Must be sized at a power of two
+    Array<SetBucket<T>> buf;   
 };
 
 static constexpr u32 HASH_TABLE_DEFAULT_SIZE = 256;

@@ -41,6 +41,7 @@ void print_line(const String& filename,u32 line)
 #include "array.cpp"
 #include "string.cpp"
 #include "hashtable.cpp"
+#include "set.cpp"
 #include "heap_sort.cpp"
 
 // read entire file into string buf
