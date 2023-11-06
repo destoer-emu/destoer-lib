@@ -71,9 +71,9 @@ void rehash(Set<T>& set, u32 set_size)
 
     set.buf = buf_new;
 }
-
+// returns true if modified
 template<typename T>
-void add(Set<T>& set, const T& key)
+b32 add(Set<T>& set, const T& key)
 {
     // TODO: this is very slow
     if(set.size == count(set.buf))
@@ -90,11 +90,33 @@ void add(Set<T>& set, const T& key)
         // allready exists
         if(bucket[i] == key)
         {
-            return;
+            return false;
         }
     }
 
     // did not exist in bucket add it
     push_var(bucket,key);
     set.size++;
+
+    return true;
+}
+
+// returns true if modified
+template<typename T>
+b32 set_union(Set<T>& out, const Set<T>& other)
+{
+    b32 modified = false;
+
+    // add all keys to out in other
+    for(u32 i = 0; i < count(other.buf); i++)
+    {
+        const SetBucket<T>& bucket = other.buf[i];
+
+        for(u32 j = 0; j < count(bucket); j++)
+        {
+            modified |= add(out,bucket[j]);
+        }
+    }
+
+    return modified;   
 }
