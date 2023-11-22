@@ -46,6 +46,36 @@ String string_slice(const String& str, u32 offset, u32 len)
     return out;
 }
 
+s32 string_find(const String& str, const String& search)
+{
+    if(search.size == 0)
+    {
+        return -1;
+    }
+
+    for(u32 i = 0; i < str.size; i++)
+    {
+        // initial hit
+        if(str[i] == search[0])
+        {
+            const auto clip = string_slice(str,i,search.size);
+
+            if(clip.size != 0 && string_equal(clip,search))
+            {
+                return i;
+            }
+        }
+    }
+
+    return -1;
+}
+
+bool string_contains(const String& str, const String& search)
+{
+    return string_find(str,search) != -1;
+}
+
+
 // build strings on an arena
 using StringBuffer = Array<char>;
 

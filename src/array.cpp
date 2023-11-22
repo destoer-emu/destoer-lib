@@ -27,6 +27,25 @@ T pop(Array<T> &arr)
     return v;
 }
 
+template<typename T>
+void remove_unordered_key(Array<T>& arr, const T& key)
+{
+    // scan for key
+    for(u32 i = 0; i < count(arr); i++)
+    {
+        // swap to end and pop
+        if(arr[i] == key)
+        {
+            const auto tmp = arr[i];
+            arr[i] = arr[count(arr) - 1];
+            arr[count(arr) - 1] = tmp;
+
+            pop(arr);
+            return;
+        }
+    }
+}
+
 
 template<typename T>
 void reserve_mem(Array<T> &arr, u32 size)
