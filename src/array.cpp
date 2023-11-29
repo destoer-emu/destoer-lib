@@ -113,26 +113,30 @@ T read_mem(const Array<Y> &arr, u32 idx)
 
 // insert raw memory block into the array
 template<typename T>
-void push_mem(Array<T>& arr, const void* data, u32 size)
+u32 push_mem(Array<T>& arr, const void* data, u32 size)
 {
     reserve(arr,size);
 
     u8* addr = (u8*)arr.data + arr.size;
     memcpy(addr,data,size);
 
+    const u32 offset = arr.size;
+
     arr.size += size;
+
+    return offset;
 }
 
 template<typename T>
-void push_mem(Array<T>& arr, const String& str)
+u32 push_mem(Array<T>& arr, const String& str)
 {
-    push_mem(arr,str.buf,str.size);
+    return push_mem(arr,str.buf,str.size);
 }
 
 template<typename T>
-void push_mem(Array<T>& arr, const Array<T>& buf)
+u32 push_mem(Array<T>& arr, const Array<T>& buf)
 {
-    push_mem(arr,buf.data,buf.size);
+    return push_mem(arr,buf.data,buf.size);
 }
 
 template<typename T>
