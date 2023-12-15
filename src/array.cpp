@@ -133,8 +133,8 @@ u32 push_mem(Array<T>& arr, const String& str)
     return push_mem(arr,str.buf,str.size);
 }
 
-template<typename T>
-u32 push_mem(Array<T>& arr, const Array<T>& buf)
+template<typename T,typename Y>
+u32 push_mem(Array<T>& arr, const Array<Y>& buf)
 {
     return push_mem(arr,buf.data,buf.size);
 }

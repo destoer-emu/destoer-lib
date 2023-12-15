@@ -65,7 +65,8 @@ Pair<StringBuffer,b32> read_str_buf(const String &filename)
     // allocate an appriopately sized buffer
     // and read the whole file out
     resize(buf,len + 1);
-    fread(buf.data,len,1,fp);
+    size_t rc = fread(buf.data,len,1,fp);
+    UNUSED(rc);
 
     buf[len] = '\0';
 
