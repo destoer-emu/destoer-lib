@@ -85,6 +85,14 @@ void push_char(ArenaAllocator& allocator, StringBuffer &buffer, char v)
     buffer[buffer.size++] = v;
 }
 
+void push_string(StringBuffer& buffer, const String &str)
+{
+    reserve(buffer,str.size);
+    memcpy(&buffer.data[buffer.size],str.buf,str.size);
+
+    buffer.size += str.size;
+}
+
 void push_string(ArenaAllocator& allocator, StringBuffer& buffer, const String &str)
 {
     reserve_arena(allocator,buffer,str.size);

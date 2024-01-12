@@ -116,6 +116,23 @@ void add(HashTable<Key,T> &table, const Key& key, T v)
     table.size++;
 }
 
+template<typename Key,typename T>
+void remove(HashTable<Key,T> &table, const Key& key)
+{
+    const u32 slot = hash_slot(count(table.buf),key);
+
+    HashBucket<Key,T>& bucket = table.buf[slot];
+
+    for(u32 i = 0; i < count(bucket); i++)
+    {
+        // found key
+        if(bucket[i].key == key)
+        {
+            swap(bucket[i],bucket[count(bucket)]);
+            pop(bucket);
+        }
+    }    
+}
 
 
 // for constant internal chained hashtables, see gen_table.cpp
