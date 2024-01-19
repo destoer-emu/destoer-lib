@@ -64,6 +64,9 @@ inline u32 deset_bitset_if_set(u32 set, u32 v, u32 b1, u32 b2)
 
 inline u32 popcount(u32 v)
 {
+#if defined __GNUC__
+    return __builtin_popcount(v);
+#else
     u32 count = 0;
     for(u32 i = 0; i < sizeof(v) * 8; i++)
     {
@@ -71,7 +74,34 @@ inline u32 popcount(u32 v)
     }
 
     return count;
+#endif
 }
+
+
+static constexpr u32 FFS_EMPTY = 32;
+
+inline u32 ffs(u32 v)
+{
+#if defined __GNUC__
+    if(v == 0)
+    {
+        return FFS_EMPTY;
+    }
+
+    return __builtin_ctz(v);
+#else
+    for(u32 i = 0; i < 32; i++)
+    {
+        if(is_set(v,i))
+        {
+            return i;
+        }
+    }
+
+    return FFS_EMPTY;
+#endif
+}
+
 
 // TODO: make this use compilier builtins where avaible
 template<typename T>
