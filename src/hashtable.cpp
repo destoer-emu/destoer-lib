@@ -42,7 +42,7 @@ T* lookup(HashTable<Key,T> &table, const Key& key)
 
     HashBucket<Key,T>& bucket = table.buf[slot];
 
-    
+
     for(u32 i = 0; i < count(bucket); i++)
     {
         if(bucket[i].key == key)
@@ -86,7 +86,7 @@ void rehash(HashTable<Key,T> &table, u32 table_size)
 }
 
 template<typename Key,typename T>
-void add(HashTable<Key,T> &table, const Key& key, T v)
+T* add(HashTable<Key,T> &table, const Key& key, T v)
 {
     // TODO: this is very slow
     if(table.size == count(table.buf))
@@ -105,7 +105,7 @@ void add(HashTable<Key,T> &table, const Key& key, T v)
         if(bucket[i].key == key)
         {
             bucket[i].v = v;
-            return;
+            return &bucket[i].v;
         }
     }
 
@@ -114,6 +114,9 @@ void add(HashTable<Key,T> &table, const Key& key, T v)
     HashNode<Key,T> node = {key,v};
     push_var(bucket,node);
     table.size++;
+
+    // return the new inserted entry
+    return &bucket[count(bucket) - 1].v;
 }
 
 template<typename Key,typename T>

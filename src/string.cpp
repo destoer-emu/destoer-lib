@@ -76,9 +76,6 @@ bool string_contains(const String& str, const String& search)
 }
 
 
-// build strings on an arena
-using StringBuffer = Array<char>;
-
 void push_char(ArenaAllocator& allocator, StringBuffer &buffer, char v)
 {
     reserve_arena(allocator,buffer,sizeof(v));

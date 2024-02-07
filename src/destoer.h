@@ -120,6 +120,8 @@ struct Array
     u32 capacity = 0;
 };
 
+// dynamic string
+using StringBuffer = Array<char>;
 
 // hash table
 template<typename Key,typename T>

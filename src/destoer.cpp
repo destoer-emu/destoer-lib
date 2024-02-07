@@ -16,6 +16,7 @@ void print_line(const String& filename,u32 line)
     if(!fp)
     {
         printf("could not open file %s for error printing\n",filename.buf);
+        return;
     }
 
     char buf[512] = {0};
