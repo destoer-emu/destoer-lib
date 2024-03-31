@@ -3,69 +3,54 @@
 using namespace destoer;
 
 
-b32 test_arr_str()
+void test_arr_str()
 {
-    // TODO: expand this if need be, this is basically just a simple compile check atm
     Array<String> buf;
 
     String str = "Hey";
 
     push_var(buf,str);
 
-    return buf[0] == "Hey";
+    assert(buf[0] == "Hey");
+
+    destroy_arr(buf);
+
+    assert(count(buf) == 0);
 }
 
-b32 test_bit_minip()
+void test_bit_minip()
 {
-    u32 v = 1;
+    u32 v = 0;
 
-    const b32 not_set = !is_set(v,1);
+    assert(!is_set(v,1));
 
     v = set_bit(v,1);
-
-    const b32 set = is_set(v,1);
+    
+    assert(is_set(v,1));
 
     v = deset_bit(v,1);
 
-    const b32 post_set = !is_set(v,1);
-
-    return not_set && set && post_set;
+    assert(!is_set(v,1));
 }
 
-using TEST_FUNCTION = b32 (*)();
-struct Test
+void test_bit_set_minip()
 {
-    const char* name;
-    TEST_FUNCTION func;
-};
+    assert(popcount(0xffff) == 16);
 
-const Test TESTS[] = 
-{
-    {"arr str",&test_arr_str},
-    {"bit minip",&test_bit_minip},
-};
+    assert(destoer::ffs(0) == FFS_EMPTY);
 
-static constexpr u32 TEST_SIZE = sizeof(TESTS) / sizeof(Test);
+    assert(destoer::ffs(8) == 3);
+}
 
 
 
 int main()
 {
-    for(u32 i = 0; i < TEST_SIZE; i++)
-    {
-        const auto& test = TESTS[i];
-        
-        const b32 pass = test.func();
+    test_arr_str();
 
-        if(pass)
-        {
-            printf("pass: %s\n",test.name);
-        }
+    test_bit_minip();
 
-        else
-        {
-            printf("fail: %s\n",test.name);
-            return -1;
-        }
-    }   
+    test_bit_set_minip();
+
+    puts("passed all tests");
 }
