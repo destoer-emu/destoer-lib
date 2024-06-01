@@ -6,22 +6,22 @@ inline b32 in_range(T v, T min, T max)
     return v >= min && v <= max;
 }
 
-inline u32 set_bit(u32 v, u32 bit)
+inline u64 set_bit(u64 v, u32 bit)
 {
     return v | (1 << bit);
 }
 
-inline u32 deset_bit(u32 v, u32 bit)
+inline u64 deset_bit(u64 v, u32 bit)
 {
     return v & ~(1 << bit);
 }
 
-inline b32 is_set(u32 v, u32 bit)
+inline b32 is_set(u64 v, u32 bit)
 {
     return (v >> bit) & 1;
 }
 
-inline b32 set_if_set(b32 b, b32 v, u32 bit)
+inline b32 set_if_set(b32 b, u64 v, u32 bit)
 {
     if(is_set(v,bit))
     {
@@ -31,7 +31,7 @@ inline b32 set_if_set(b32 b, b32 v, u32 bit)
     return b;
 }
 
-inline b32 deset_if_set(b32 b, b32 v, u32 bit)
+inline b32 deset_if_set(b32 b, u64 v, u32 bit)
 {
     if(is_set(v,bit))
     {
@@ -41,7 +41,7 @@ inline b32 deset_if_set(b32 b, b32 v, u32 bit)
     return b;
 }
 
-inline u32 set_bitset_if_set(u32 set, u32 v, u32 b1, u32 b2)
+inline u64 set_bitset_if_set(u64 set, u64 v, u64 b1, u64 b2)
 {
 	if(is_set(v,b1))
 	{
@@ -51,7 +51,7 @@ inline u32 set_bitset_if_set(u32 set, u32 v, u32 b1, u32 b2)
 	return set;
 }
 
-inline u32 deset_bitset_if_set(u32 set, u32 v, u32 b1, u32 b2)
+inline u64 deset_bitset_if_set(u64 set, u64 v, u64 b1, u64 b2)
 {
 	if(is_set(v,b1))
 	{
@@ -62,7 +62,7 @@ inline u32 deset_bitset_if_set(u32 set, u32 v, u32 b1, u32 b2)
 }
 
 
-inline u32 popcount(u32 v)
+inline u64 popcount(u64 v)
 {
 #if defined __GNUC__
     return __builtin_popcount(v);
@@ -78,9 +78,9 @@ inline u32 popcount(u32 v)
 }
 
 
-static constexpr u32 FFS_EMPTY = 32;
+static constexpr u32 FFS_EMPTY = 64;
 
-inline u32 ffs(u32 v)
+inline u32 ffs(u64 v)
 {
 #if defined __GNUC__
     if(v == 0)
@@ -119,16 +119,16 @@ inline T bswap(T x)
 // std::rotr and std::rotl in c++20 probs should be used
 // for now https://stackoverflow.com/questions/776508/best-practices-for-circular-shift-rotate-operations-in-c
 
-inline uint32_t rotl(uint32_t n,u32 c)
+inline u64 rotl(u64 n,u64 c)
 {
-    const u32 mask = (CHAR_BIT*sizeof(n) - 1);  
+    const u64 mask = (CHAR_BIT*sizeof(n) - 1);  
     c &= mask;
     return (n<<c) | (n>>( (-c)&mask ));
 }
 
-inline uint32_t rotr(uint32_t n, u32 c)
+inline u64 rotr(u64 n, u64 c)
 {
-    u32 mask = (CHAR_BIT*sizeof(n) - 1);
+    u64 mask = (CHAR_BIT*sizeof(n) - 1);
     c &= mask;
     return (n>>c) | (n<<( (-c)&mask ));
 }
@@ -248,14 +248,14 @@ inline OUT sign_extend_type(IN x)
     return static_cast<OUT>(static_cast<signed_type_out>(v));
 }
 
-inline u32 max(u32 v1, u32 v2)
+inline u64 max(u64 v1, u64 v2)
 {
     return v1 > v2? v1 : v2;
 }
 
-inline constexpr u32 bit_ceil(u32 v)
+inline constexpr u64 bit_ceil(u64 v)
 {
-    u32 ans = 1;
+    u64 ans = 1;
     while(ans < v)
     {
         ans *= 2;
