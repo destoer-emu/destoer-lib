@@ -38,12 +38,6 @@ using f64 = double;
 
 #define UNUSED(X) ((void)X)
 
-// string
-struct String;
-bool string_equal(const String& str1, const String& str2);
-u32 hash_string(const String& str, u32 hash);
-String make_static_string(const char* str, u32 len);
-
 template<typename T1, typename T2>
 struct Pair
 {
@@ -60,6 +54,40 @@ void tie(const Pair<T1,T2> &pair,T1 &v1, T2 &v2)
     v1 = pair.v1;
     v2 = pair.v2;
 }
+
+
+// array
+template<typename T>
+struct Array
+{
+    T& operator [] (u32 i) 
+    {
+        return this->data[i];
+    }
+
+    const T& operator [] (u32 i) const
+    {
+        return this->data[i];
+    }
+
+    T* data = nullptr;
+
+    // in raw bytes
+    u32 size = 0;
+    u32 capacity = 0;
+};
+
+// dynamic string
+using StringBuffer = Array<char>;
+
+// allocator
+struct ArenaAllocator;
+
+// string
+struct String;
+bool string_equal(const String& str1, const String& str2);
+u32 hash_string(const String& str, u32 hash);
+String make_static_string(const char* str, u32 len);
 
 // NOTE: this is designed as a 'view' string it never owns the memory it points to to
 struct String
@@ -99,29 +127,31 @@ struct String
     u32 size = 0;
 };
 
-// array
-template<typename T>
-struct Array
-{
-    T& operator [] (u32 i) 
-    {
-        return this->data[i];
-    }
+bool string_equal(const String& str1, const String& str2);
 
-    const T& operator [] (u32 i) const
-    {
-        return this->data[i];
-    }
+String string_offset(const String& str, u32 offset);
+String string_slice(const String& str, u32 offset, u32 len);
 
-    T* data = nullptr;
+s32 string_find(const String& str, const String& search);
+bool string_contains(const String& str, const String& search);
 
-    // in raw bytes
-    u32 size = 0;
-    u32 capacity = 0;
-};
+void push_char(ArenaAllocator& allocator, StringBuffer &buffer, char v);
+void push_string(StringBuffer& buffer, const String &str);
+void push_string(ArenaAllocator& allocator, StringBuffer& buffer, const String &str);
 
-// dynamic string
-using StringBuffer = Array<char>;
+String make_string(StringBuffer& buffer);
+String make_string(ArenaAllocator& allocator,const char* str, u32 size);
+String make_string(ArenaAllocator& allocator,const char* str);
+String make_static_string(const char* str, u32 size);
+
+u32 hash_slot(u32 size, const String& name);
+
+String copy_string(ArenaAllocator& allocator, const String& in);
+String cat_string(ArenaAllocator& allocator, const String &v1, const String& v2);
+bool contains_ext(const String& str);
+String extract_path(const String& filename);
+
+Pair<StringBuffer,b32> read_str_buf(const String &filename);
 
 // hash table
 template<typename Key,typename T>
@@ -130,7 +160,6 @@ struct HashNode
     Key key = {};
     T v = {};
 };
-
 
 
 template<typename Key,typename T>
@@ -160,9 +189,6 @@ struct Set
 static constexpr u32 HASH_TABLE_DEFAULT_SIZE = 256;
 static constexpr s32 INVALID_HASH_SLOT = -1;
 
-// allocator
-struct ArenaAllocator;
-
 struct Arena
 {
     // how much have we used?
@@ -187,14 +213,20 @@ struct ArenaAllocator
 };
 
 void* allocate(ArenaAllocator& allocator, u32 size);
-
-
+Arena& cur_arena(ArenaAllocator& allocator);
+void reserve_end(Arena& arena,u32 size);
+ArenaAllocator make_allocator(u32 size);
+void destroy_allocator(ArenaAllocator &allocator);
 
 void print_line(const String& filename,u32 line);
 
 #include <destoer/bit-ops.inl>
 #include <destoer/stl-helpers.inl>
 
+#include <destoer/array.inl>
+#include <destoer/hash_table.inl>
+#include <destoer/set.inl>
+#include <destoer/heap_sort.inl>
 
 // stl helpers
 b32 read_bin(const std::string& filename, std::vector<u8>& buf);

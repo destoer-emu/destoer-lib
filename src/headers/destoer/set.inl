@@ -4,7 +4,7 @@
 static constexpr u32 SET_DEFAULT_SIZE = 32;
 
 template<typename T>
-Set<T> make_set()
+inline Set<T> make_set()
 {
     Set<T> set;
     resize(set.buf,SET_DEFAULT_SIZE);
@@ -14,7 +14,7 @@ Set<T> make_set()
 
 
 template<typename T>
-void destroy_set(Set<T>& set)
+inline void destroy_set(Set<T>& set)
 {
     for(u32 i = 0; i < count(set.buf); i++)
     {
@@ -30,7 +30,7 @@ void destroy_set(Set<T>& set)
 }
 
 template<typename T>
-b32 contains(Set<T>& set, const T& key)
+inline b32 contains(Set<T>& set, const T& key)
 {
     const u32 slot = hash_slot(count(set.buf),key);
 
@@ -49,7 +49,7 @@ b32 contains(Set<T>& set, const T& key)
 
 
 template<typename T>
-void rehash(Set<T>& set, u32 set_size)
+inline void rehash(Set<T>& set, u32 set_size)
 {
     Array<SetBucket<T>> buf_new;
     resize(buf_new,set_size);
@@ -73,7 +73,7 @@ void rehash(Set<T>& set, u32 set_size)
 }
 // returns true if modified
 template<typename T>
-b32 add(Set<T>& set, const T& key)
+inline b32 add(Set<T>& set, const T& key)
 {
     // TODO: this is very slow
     if(set.size == count(set.buf))
@@ -103,7 +103,7 @@ b32 add(Set<T>& set, const T& key)
 
 // returns true if modified
 template<typename T>
-b32 set_union(Set<T>& out, const Set<T>& other)
+inline b32 set_union(Set<T>& out, const Set<T>& other)
 {
     b32 modified = false;
 

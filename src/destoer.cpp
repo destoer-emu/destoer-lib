@@ -39,11 +39,7 @@ void print_line(const String& filename,u32 line)
 
 #include "stl-helpers.cpp"
 #include "alloc.cpp"
-#include "array.cpp"
 #include "string.cpp"
-#include "hashtable.cpp"
-#include "set.cpp"
-#include "heap_sort.cpp"
 
 // read entire file into string buf
 Pair<StringBuffer,b32> read_str_buf(const String &filename)
