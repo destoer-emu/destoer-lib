@@ -119,16 +119,16 @@ inline T bswap(T x)
 // std::rotr and std::rotl in c++20 probs should be used
 // for now https://stackoverflow.com/questions/776508/best-practices-for-circular-shift-rotate-operations-in-c
 
-inline u64 rotl(u64 n,u64 c)
+inline u32 rotl(u32 n,u32 c)
 {
-    const u64 mask = (CHAR_BIT*sizeof(n) - 1);  
+    const u32 mask = (CHAR_BIT*sizeof(n) - 1);  
     c &= mask;
     return (n<<c) | (n>>( (-c)&mask ));
 }
 
-inline u64 rotr(u64 n, u64 c)
+inline u32 rotr(u32 n, u32 c)
 {
-    u64 mask = (CHAR_BIT*sizeof(n) - 1);
+    u32 mask = (CHAR_BIT*sizeof(n) - 1);
     c &= mask;
     return (n>>c) | (n<<( (-c)&mask ));
 }
