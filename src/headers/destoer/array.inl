@@ -12,6 +12,16 @@ inline void push_var(Array<T> &arr,Y v)
 }
 
 template<typename T>
+inline Array<T> clip_array(Array<T> arr, u32 size)
+{
+    auto out = arr;
+    out.size = size * sizeof(T);
+
+    return out;
+}
+
+
+template<typename T>
 inline u32 count(Array<T> arr)
 {
     return arr.size / sizeof(T);
