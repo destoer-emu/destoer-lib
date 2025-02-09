@@ -16,16 +16,12 @@ inline Set<T> make_set()
 template<typename T>
 inline void destroy_set(Set<T>& set)
 {
-    for(u32 i = 0; i < count(set.buf); i++)
+    for(auto& bucket : set.buf)
     {
-        SetBucket<T>& bucket = set.buf[i];
-
-        for(u32 j = 0; j < count(bucket); j++)
-        {
-            destroy_arr(bucket);
-        }
+        destroy_arr(bucket);
     }    
 
+    set.size = 0;
     destroy_arr(set.buf);
 }
 
@@ -36,9 +32,9 @@ inline b32 contains(Set<T>& set, const T& key)
 
     SetBucket<T>& bucket = set.buf[slot];
 
-    for(u32 i = 0; i < count(bucket); i++)
+    for(const auto& node : bucket)
     {
-        if(bucket[i] == key)
+        if(node == key)
         {
             return true;
         }
@@ -54,14 +50,10 @@ inline void rehash(Set<T>& set, u32 set_size)
     Array<SetBucket<T>> buf_new;
     resize(buf_new,set_size);
 
-    for(u32 i = 0; i < count(set.buf); i++)
+    for(auto& bucket : set.buf)
     {
-        const SetBucket<T>& bucket = set.buf[i];
-
-        for(u32 j = 0; j < count(bucket); j++)
+        for(auto& data : bucket)
         {
-            const auto &data = bucket[j];
-
             const u32 slot = hash_slot(count(buf_new),data);
             push_var(buf_new[slot],data);
         }
@@ -85,10 +77,10 @@ inline b32 add(Set<T>& set, const T& key)
 
     SetBucket<T>& bucket = set.buf[slot];
 
-    for(u32 i = 0; i < count(bucket); i++)
+    for(auto& node : bucket)
     {
         // allready exists
-        if(bucket[i] == key)
+        if(node == key)
         {
             return false;
         }
@@ -108,13 +100,11 @@ inline b32 set_union(Set<T>& out, const Set<T>& other)
     b32 modified = false;
 
     // add all keys to out in other
-    for(u32 i = 0; i < count(other.buf); i++)
+    for(auto& bucket : other.buf)
     {
-        const SetBucket<T>& bucket = other.buf[i];
-
-        for(u32 j = 0; j < count(bucket); j++)
+        for(auto& node : bucket)
         {
-            modified |= add(out,bucket[j]);
+            modified |= add(out,node);
         }
     }
 

@@ -21,16 +21,12 @@ inline HashTable<Key,T> make_table()
 template<typename Key,typename T>
 inline void destroy_table(HashTable<Key,T> &table)
 {
-    for(u32 i = 0; i < count(table.buf); i++)
+    for(auto& bucket : table.buf)
     {
-        HashBucket<Key,T>& bucket = table.buf[i];
+        destroy_arr(bucket);
+    }
 
-        for(u32 j = 0; j < count(bucket); j++)
-        {
-            destroy_arr(bucket);
-        }
-    }    
-
+    table.size = 0;
     destroy_arr(table.buf);
 }
 
@@ -42,12 +38,11 @@ inline T* lookup(HashTable<Key,T> &table, const Key& key)
 
     HashBucket<Key,T>& bucket = table.buf[slot];
 
-
-    for(u32 i = 0; i < count(bucket); i++)
+    for(auto& node : bucket)
     {
-        if(bucket[i].key == key)
+        if(node.key == key)
         {
-            return &bucket[i].v;
+            return &node.v;
         }
     }
 
@@ -67,14 +62,11 @@ inline void rehash(HashTable<Key,T> &table, u32 table_size)
     Array<HashBucket<Key,T>> buf_new;
     resize(buf_new,table_size);
 
-    for(u32 i = 0; i < count(table.buf); i++)
+
+    for(auto& bucket : table.buf)
     {
-        const HashBucket<Key,T>& bucket = table.buf[i];
-
-        for(u32 j = 0; j < count(bucket); j++)
+        for(auto& node : bucket)
         {
-            const auto &node = bucket[j];
-
             const u32 slot = hash_slot(count(buf_new),node.key);
             push_var(buf_new[slot],node);
         }
@@ -99,13 +91,13 @@ inline T* add(HashTable<Key,T> &table, const Key& key, T v)
 
     HashBucket<Key,T>& bucket = table.buf[slot];
 
-    for(u32 i = 0; i < count(bucket); i++)
+    for(auto& node : bucket)
     {
         // allready exists
-        if(bucket[i].key == key)
+        if(node.key == key)
         {
-            bucket[i].v = v;
-            return &bucket[i].v;
+            node.v = v;
+            return &node.v;
         }
     }
 
@@ -133,6 +125,7 @@ inline void remove(HashTable<Key,T> &table, const Key& key)
         {
             swap(bucket[i],bucket[count(bucket)]);
             pop(bucket);
+            table.size--;
         }
     }    
 }

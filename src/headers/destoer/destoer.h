@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iterator>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,6 +69,26 @@ struct Array
     const T& operator [] (u32 i) const
     {
         return this->data[i];
+    }
+
+    T* begin() 
+    {
+        return data;
+    }
+
+    T* end()
+    {
+        return data + (size / sizeof(T));
+    }
+
+    const T* begin() const
+    {
+        return data;
+    }
+
+    const T* end() const
+    {
+        return data + (size / sizeof(T));
     }
 
     T* data = nullptr;
@@ -153,6 +174,71 @@ String extract_path(const String& filename);
 
 Pair<StringBuffer,b32> read_str_buf(const String &filename);
 
+template<typename T>
+struct BucketIterator
+{
+    void skip_empty_buckets()
+    {
+        while(bucket_idx < count(buckets) && count(buckets[bucket_idx]) == 0)
+        {
+            bucket_idx++;
+        }
+    }
+
+    BucketIterator(Array<Array<T>> buckets)
+    {
+        this->buckets = buckets;
+        skip_empty_buckets();
+    }
+
+    size_t bucket_idx = 0;
+    size_t data_idx = 0;
+    size_t iterated = 0;
+    Array<Array<T>> buckets;   
+
+    bool operator==(const BucketIterator<T>& it) const 
+    {
+        return iterated == it.iterated;
+    }
+
+    BucketIterator<T>& operator++()
+    {
+        iterated++;
+        data_idx++;
+
+        if(data_idx >= count(buckets[bucket_idx]))
+        {
+            bucket_idx++;
+            data_idx = 0;
+
+            skip_empty_buckets();
+        }
+
+        return *this;
+    }
+
+    T& operator*()
+    {
+        auto& bucket = buckets[bucket_idx];
+        return bucket[data_idx];
+    }
+
+    const T& operator*() const
+    {
+        auto& bucket = buckets[bucket_idx];
+        return bucket[data_idx];
+    }
+};
+
+template<typename T>
+BucketIterator<T> end_iter(const Array<Array<T>> buf, size_t size)
+{
+    BucketIterator<T> it(buf);
+    it.iterated = size;
+
+    return it;
+}
+
 // hash table
 template<typename Key,typename T>
 struct HashNode
@@ -168,6 +254,29 @@ using HashBucket = Array<HashNode<Key,T>>;
 template<typename Key,typename T>
 struct HashTable
 {
+    using HashNodeType = HashNode<Key,T>;
+
+    BucketIterator<HashNodeType> begin()
+    {
+        return BucketIterator<HashNodeType>(buf);
+    }
+
+    BucketIterator<HashNodeType> end()
+    {
+        return end_iter(buf,size);
+    }
+
+    const BucketIterator<HashNodeType> begin() const
+    {
+        return BucketIterator<HashNodeType>(buf);
+    }
+
+    const BucketIterator<HashNodeType> end() const
+    {
+        return end_iter(buf,size);
+    }
+
+
     u32 size = 0;
 
     // NOTE: Must be sized at a power of two
@@ -180,6 +289,26 @@ using SetBucket = Array<T>;
 template<typename T>
 struct Set
 {
+    BucketIterator<T> begin()
+    {
+        return BucketIterator<T>(buf);
+    }
+
+    BucketIterator<T> end()
+    {
+        return end_iter(buf,size);
+    }
+
+    const BucketIterator<T> begin() const
+    {
+        return BucketIterator<T>(buf);
+    }
+
+    const BucketIterator<T> end() const
+    {
+        return end_iter(buf,size);
+    }
+
     u32 size = 0;
 
     // NOTE: Must be sized at a power of two
