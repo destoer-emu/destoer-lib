@@ -74,6 +74,19 @@ inline void file_read_arr(std::ifstream &fp, T *data, size_t size)
 	fp.read(reinterpret_cast<char*>(data),size);
 }
 
+inline b32 file_exists(const char* name)
+{
+	FILE* fp = fopen(name,"r");
+
+	if(!fp)
+	{
+		return false;
+	}
+
+	fclose(fp);
+	return true;
+}
+
 template<typename T>
 inline void file_write_vec(std::ofstream &fp, const std::vector<T> &buf)
 {

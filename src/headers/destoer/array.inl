@@ -36,6 +36,17 @@ inline T pop(Array<T> &arr)
     return v;
 }
 
+// Remove an array item by swapping it off the end.
+template<typename T>
+inline void remove_out_of_place(Array<T>& arr, u32 idx)
+{
+    const auto tmp = arr[idx];
+    arr[idx] = arr[count(arr) - 1];
+    arr[count(arr) - 1] = tmp;
+
+    pop(arr);
+}
+
 template<typename T>
 inline void remove_unordered_key(Array<T>& arr, const T& key)
 {
@@ -45,11 +56,7 @@ inline void remove_unordered_key(Array<T>& arr, const T& key)
         // swap to end and pop
         if(arr[i] == key)
         {
-            const auto tmp = arr[i];
-            arr[i] = arr[count(arr) - 1];
-            arr[count(arr) - 1] = tmp;
-
-            pop(arr);
+            remove_out_of_place(arr,i);
             return;
         }
     }
