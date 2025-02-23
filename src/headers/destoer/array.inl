@@ -1,6 +1,6 @@
 // insert at end as a var as a raw set of bytes into the Array
 template<typename T, typename Y>
-inline void push_var(Array<T> &arr,Y v)
+inline void push_raw_var(Array<T> &arr,const Y& v)
 {
     const u32 size = sizeof(v);
 
@@ -9,6 +9,13 @@ inline void push_var(Array<T> &arr,Y v)
     // actually write in the data
     handle_write(&arr.data[count(arr)],v);
     arr.size += size;
+}
+
+// Push var on end
+template<typename T>
+inline void push_var(Array<T> &arr,const T& v)
+{
+    push_raw_var(arr,v);
 }
 
 template<typename T>
