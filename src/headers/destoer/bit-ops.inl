@@ -90,11 +90,35 @@ inline u32 ffs(u64 v)
 
     return __builtin_ctz(v);
 #else
-    for(u32 i = 0; i < 32; i++)
+    for(u32 i = 0; i < 64; i++)
     {
         if(is_set(v,i))
         {
             return i;
+        }
+    }
+
+    return FFS_EMPTY;
+#endif
+}
+
+static constexpr u32 FLS_EMPTY = 64;
+
+inline u32 fls(u64 v)
+{
+#if defined __GNUC__
+    if(v == 0)
+    {
+        return FLS_EMPTY;
+    }
+
+    return 63 - __builtin_clzl(v);
+#else
+    for(u32 i = 63; i >= 0; i--)
+    {
+        if(is_set(v,i))
+        {
+            return 63 - i;
         }
     }
 
