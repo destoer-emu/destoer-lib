@@ -112,6 +112,15 @@ inline T* add(HashTable<Key,T> &table, const Key& key, T v)
 }
 
 template<typename Key,typename T>
+inline bool add_checked(HashTable<Key,T> &table, const Key& key, T v)
+{
+    const u32 size = table.size;
+    add(table,key,v);
+
+    return size != table.size;
+}
+
+template<typename Key,typename T>
 inline void remove(HashTable<Key,T> &table, const Key& key)
 {
     const u32 slot = hash_slot(count(table.buf),key);

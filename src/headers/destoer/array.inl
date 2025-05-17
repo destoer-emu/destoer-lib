@@ -45,13 +45,27 @@ inline T pop(Array<T> &arr)
 
 // Remove an array item by swapping it off the end.
 template<typename T>
-inline void remove_out_of_place(Array<T>& arr, u32 idx)
+inline T remove_out_of_place(Array<T>& arr, u32 idx)
 {
     const auto tmp = arr[idx];
     arr[idx] = arr[count(arr) - 1];
     arr[count(arr) - 1] = tmp;
 
-    pop(arr);
+    return pop(arr);
+}
+
+template<typename T>
+inline void move_into_array(Array<T>& dst, Array<T>& src, u32 idx)
+{
+    push_var(dst,remove_out_of_place(src,idx));
+}
+
+template<typename T>
+inline Array<T> copy_array(const Array<T>& src)
+{
+    Array<T> out;
+    push_mem(out,src.data,src.size);
+    return out;
 }
 
 template<typename T>
