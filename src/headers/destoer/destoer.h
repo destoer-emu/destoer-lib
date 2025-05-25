@@ -36,6 +36,16 @@ using b8 = u8;
 using f32 = float;
 using f64 = double;
 
+enum class [[nodiscard]] dtr_res : u32
+{
+    ok,
+    err
+};
+
+inline bool operator! (dtr_res res)
+{
+    return res == dtr_res::err;
+}
 
 #define UNUSED(X) ((void)X)
 
