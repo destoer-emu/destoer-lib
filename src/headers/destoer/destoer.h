@@ -108,6 +108,133 @@ struct Array
     u32 capacity = 0;
 };
 
+
+
+template<typename T, typename E>
+struct [[nodiscard]] Result
+{    
+    Result(const E& error) 
+    {
+        this->kind = dtr_res::err;
+        this->err = error;
+    }
+
+    Result(const T& value) 
+    {
+        this->kind = dtr_res::ok;
+        this->data = value;
+    }
+
+    const E& error() const
+    {
+        assert(this->kind == dtr_res::err);
+        return this->err;
+    }
+
+    const T& value() const 
+    {
+        assert(this->kind == dtr_res::ok);
+        return this->data;
+    }
+
+    union
+    {
+        T data = {};
+        E err;
+    };
+
+    dtr_res kind;
+};
+
+template<typename T, typename E>
+inline bool operator!(const Result<T,E>& res)
+{
+    return res.kind == dtr_res::err;
+}
+
+template<typename T, typename E>
+inline const T operator*(const Result<T,E>& res)
+{
+    return res.value();
+}
+
+template<typename T, typename E>
+inline T operator*(Result<T,E>& res)
+{
+    return res.value();
+}
+
+
+enum class option
+{
+    none,
+};
+
+template<typename T>
+struct [[nodiscard]] Option
+{
+    Option(const T& value) {
+        this->data = value;
+        this->res = dtr_res::ok;
+    }
+
+    Option(option value) {
+        UNUSED(value);
+        this->res = dtr_res::err;
+    }
+
+    T& value() {
+        assert(this->res == dtr_res::ok);
+        return this->data;
+    }
+
+    const T& value() const {
+        assert(this->res == dtr_res::ok);
+        return this->data;
+    }
+
+
+    T data;
+    dtr_res res;
+};
+
+template<typename T>
+inline bool operator!(const Option<T> opt)
+{
+    return opt.res == dtr_res::err;
+}
+
+template<typename T>
+inline const T& operator*(const Option<T>& opt)
+{
+    return opt.value();
+}
+
+template<typename T>
+inline T operator*(Option<T>& opt)
+{
+    return opt.value();
+}
+
+
+
+template<typename T>
+inline Option<T> option_none()
+{
+    Option<T> opt;
+    opt.res = dtr_res::err;
+
+    return opt;
+}
+
+template<typename T>
+inline Option<T> option_some(const T& value)
+{
+    Option<T> opt = {value,dtr_res::ok};
+    return opt;
+}
+
+
 // dynamic string
 using StringBuffer = Array<char>;
 

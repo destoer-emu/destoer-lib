@@ -15,3 +15,5 @@ endif()
 # build bar
 add_library(destoer "src/destoer.cpp")
 target_include_directories(destoer PUBLIC "src/headers")
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
