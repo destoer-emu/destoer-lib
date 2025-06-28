@@ -8,8 +8,8 @@ inline void handle_write(std::vector<u8> &buf,u32 addr,access_type v)
 	#ifdef BOUNDS_CHECK // bounds check the memory access (we are very screwed if this happens)
 		if(buf.size() < addr + sizeof(access_type))
 		{
-			auto err = fmt::format("out of range handle write at: {:08x}:{:08x}\n",addr,buf.data());
-			throw std::runtime_error(err);
+			std::cout << fmt::format("out of range handle write at: {:08x}:{:08x}\n",addr,buf.data());
+			assert(false);
 		}
 	#endif
 
@@ -28,8 +28,8 @@ inline access_type handle_read(std::vector<u8> &buf,u32 addr)
 	#ifdef BOUNDS_CHECK // bounds check the memory access (we are very screwed if this happens)
 		if(buf.size() < addr + sizeof(access_type))
 		{
-			auto err = fmt::format("out of range handle read at: {:08x}:{:08x}\n",addr,buf.data());
-			throw std::runtime_error(err);
+			std::cout << fmt::format("out of range handle read at: {:08x}:{:08x}\n",addr,buf.data());
+			assert(false);
 		}
 	#endif
 
@@ -47,14 +47,16 @@ inline void file_write_var(std::ofstream &fp, const T &data)
 }
 
 template<typename T>
-inline void file_read_var(std::ifstream &fp, T &data)
+inline dtr_res file_read_var(std::ifstream &fp, T &data)
 {
 	auto sz = get_remaining_ifstream_size(fp);
 	if(sz < sizeof(T))
 	{
-		throw std::runtime_error("file_read_var error");
+		return dtr_res::err;
 	}
 	fp.read(reinterpret_cast<char*>(&data),sizeof(T));
+
+	return dtr_res::ok;
 }
 
 template<typename T>
@@ -64,14 +66,16 @@ inline void file_write_arr(std::ofstream &fp, const T *data,size_t size)
 }
 
 template<typename T>
-inline void file_read_arr(std::ifstream &fp, T *data, size_t size)
+inline dtr_res file_read_arr(std::ifstream &fp, T *data, size_t size)
 {
 	auto sz = get_remaining_ifstream_size(fp);
 	if(sz < size)
 	{
-		throw std::runtime_error("file_read_arr error");
+		return dtr_res::err;
 	}	
 	fp.read(reinterpret_cast<char*>(data),size);
+
+	return dtr_res::ok;
 }
 
 inline b32 file_exists(const char* name)
@@ -94,12 +98,14 @@ inline void file_write_vec(std::ofstream &fp, const std::vector<T> &buf)
 }
 
 template<typename T>
-inline void file_read_vec(std::ifstream &fp,std::vector<T> &buf)
+inline dtr_res file_read_vec(std::ifstream &fp,std::vector<T> &buf)
 {
 	auto sz = get_remaining_ifstream_size(fp);
 	if(sz < sizeof(T) * buf.size())
 	{
-		throw std::runtime_error("file_read_vec error");
+		return dtr_res::err;
 	}		
 	fp.read(reinterpret_cast<char*>(buf.data()),sizeof(T)*buf.size());
+
+	return dtr_res::ok;
 }

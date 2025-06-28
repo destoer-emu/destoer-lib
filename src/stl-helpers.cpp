@@ -1,11 +1,11 @@
 
-b32 read_bin(const std::string& filename, std::vector<u8>& buf)
+dtr_res read_bin(const std::string& filename, std::vector<u8>& buf)
 {
     std::ifstream fp(filename,std::ios::binary);
 
     if(!fp)
     {
-        return true;
+        return dtr_res::err;
     }
 
 
@@ -20,22 +20,22 @@ b32 read_bin(const std::string& filename, std::vector<u8>& buf)
 
     fp.read((char*)buf.data(),size);
 
-    return false;
+    return dtr_res::ok;
 }
 
-b32 write_bin(const std::string &filename, std::vector<uint8_t> &buf)
+dtr_res write_bin(const std::string &filename, std::vector<uint8_t> &buf)
 {
     std::fstream fp(filename,std::ios::out | std::ios::binary);
 
     if(!fp)
     {
-        return true;
+        return dtr_res::err;
     }
 
 
     fp.write((char*)buf.data(),buf.size());
 
-    return false;
+    return dtr_res::ok;
 }
 
 // pull every file from every directory recursively

@@ -47,6 +47,14 @@ inline bool operator! (dtr_res res)
     return res == dtr_res::err;
 }
 
+inline void operator|= (dtr_res &v1, dtr_res v2)
+{
+    if(v2 == dtr_res::err)
+    {
+        v1 = dtr_res::err;
+    }
+}
+
 #define UNUSED(X) ((void)X)
 
 template<typename T1, typename T2>
@@ -495,8 +503,8 @@ void print_line(const String& filename,u32 line);
 #include <destoer/heap_sort.inl>
 
 // stl helpers
-b32 read_bin(const std::string& filename, std::vector<u8>& buf);
-b32 write_bin(const std::string &filename, std::vector<uint8_t> &buf);
+dtr_res read_bin(const std::string& filename, std::vector<u8>& buf);
+dtr_res write_bin(const std::string &filename, std::vector<uint8_t> &buf);
 std::pair<std::vector<std::string>,b32> read_dir_tree(const std::string &file_path);
 std::string name_from_path(const std::string& name);
 std::vector<std::string> filter_ext(const std::vector<std::string> &files,const std::string &str);
