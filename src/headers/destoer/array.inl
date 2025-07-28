@@ -109,6 +109,11 @@ inline void resize(Array<T> &arr, u32 len)
     }
 }
 
+template<typename T>
+inline void zero_arr(Array<T>& arr)
+{
+    memset(arr.data,0,arr.capacity);
+}
 
 // make sure there is enough left for the allocation we are doing
 template<typename T>

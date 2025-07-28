@@ -118,6 +118,18 @@ struct Array
 
 
 
+struct BitSet
+{
+    u64 count = 0;
+    Array<u32> set;
+};
+
+BitSet make_bit_set(u32 bits);
+bool test_bit_set(const BitSet& set,u32 bit);
+void set_bit_set(BitSet& set, u32 bit);
+void destroy_bit_set(BitSet& bit_set);
+
+
 template<typename T, typename E>
 struct [[nodiscard]] Result
 {    
@@ -284,7 +296,6 @@ struct String
     {
         return !string_equal(*this,other);
     }
-    
 
     const char* buf = nullptr;
 
@@ -292,6 +303,12 @@ struct String
     // after the size of C string compat
     u32 size = 0;
 };
+
+    
+inline bool operator! (const String& str)
+{
+    return str.size == 0;
+}
 
 bool string_equal(const String& str1, const String& str2);
 

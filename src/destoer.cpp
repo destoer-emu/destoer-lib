@@ -40,6 +40,7 @@ void print_line(const String& filename,u32 line)
 #include "stl-helpers.cpp"
 #include "alloc.cpp"
 #include "string.cpp"
+#include "bit_set.cpp"
 
 // read entire file into string buf
 Pair<StringBuffer,b32> read_str_buf(const String &filename)
