@@ -129,10 +129,15 @@ bool test_bit_set(const BitSet& set,u32 bit);
 void set_bit_set(BitSet& set, u32 bit);
 void destroy_bit_set(BitSet& bit_set);
 
-
 template<typename T, typename E>
 struct [[nodiscard]] Result
-{    
+{
+    // Can't nest Options<Result> without this
+    Result()
+    {
+
+    } 
+
     Result(const E& error) 
     {
         this->kind = dtr_res::err;
@@ -253,7 +258,6 @@ inline Option<T> option_some(const T& value)
     Option<T> opt = {value,dtr_res::ok};
     return opt;
 }
-
 
 // dynamic string
 using StringBuffer = Array<char>;
