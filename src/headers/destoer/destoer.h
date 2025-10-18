@@ -162,6 +162,11 @@ struct [[nodiscard]] Result
         return this->data;
     }
 
+    operator bool() const
+    {
+        return this->kind != dtr_res::err;
+    }
+
     union
     {
         T data = {};
@@ -216,6 +221,12 @@ struct [[nodiscard]] Option
     const T& value() const {
         assert(this->res == dtr_res::ok);
         return this->data;
+    }
+
+
+    operator bool() const
+    {
+        return this->res != dtr_res::err;
     }
 
 
@@ -300,6 +311,12 @@ struct String
     {
         return !string_equal(*this,other);
     }
+
+    operator bool() const
+    {
+        return this->size != 0;
+    }
+
 
     const char* buf = nullptr;
 
