@@ -162,7 +162,7 @@ struct [[nodiscard]] Result
         return this->data;
     }
 
-    operator bool() const
+    explicit operator bool() const
     {
         return this->kind != dtr_res::err;
     }
@@ -224,7 +224,7 @@ struct [[nodiscard]] Option
     }
 
 
-    operator bool() const
+    explicit operator bool() const
     {
         return this->res != dtr_res::err;
     }
