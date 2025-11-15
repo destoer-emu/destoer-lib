@@ -109,6 +109,12 @@ struct Array
         return data + (size / sizeof(T));
     }
 
+
+    explicit operator bool() const
+    {
+        return size != 0;
+    }
+
     T* data = nullptr;
 
     // in raw bytes
