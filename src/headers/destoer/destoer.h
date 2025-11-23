@@ -135,72 +135,6 @@ bool test_bit_set(const BitSet& set,u32 bit);
 void set_bit_set(BitSet& set, u32 bit);
 void destroy_bit_set(BitSet& bit_set);
 
-template<typename T, typename E>
-struct [[nodiscard]] Result
-{
-    // Can't nest Options<Result> without this
-    Result()
-    {
-
-    } 
-
-    Result(const E& error) 
-    {
-        this->kind = dtr_res::err;
-        this->err = error;
-    }
-
-    Result(const T& value) 
-    {
-        this->kind = dtr_res::ok;
-        this->data = value;
-    }
-
-    const E& error() const
-    {
-        assert(this->kind == dtr_res::err);
-        return this->err;
-    }
-
-    const T& value() const 
-    {
-        assert(this->kind == dtr_res::ok);
-        return this->data;
-    }
-
-    explicit operator bool() const
-    {
-        return this->kind != dtr_res::err;
-    }
-
-    union
-    {
-        T data = {};
-        E err;
-    };
-
-    dtr_res kind;
-};
-
-template<typename T, typename E>
-inline bool operator!(const Result<T,E>& res)
-{
-    return res.kind == dtr_res::err;
-}
-
-template<typename T, typename E>
-inline const T operator*(const Result<T,E>& res)
-{
-    return res.value();
-}
-
-template<typename T, typename E>
-inline T operator*(Result<T,E>& res)
-{
-    return res.value();
-}
-
-
 enum class option
 {
     none,
@@ -275,6 +209,82 @@ inline Option<T> option_some(const T& value)
     Option<T> opt = {value,dtr_res::ok};
     return opt;
 }
+
+template<typename T, typename E>
+struct [[nodiscard]] Result
+{
+    // Can't nest Options<Result> without this
+    Result()
+    {
+
+    } 
+
+    Result(const E& error) 
+    {
+        this->kind = dtr_res::err;
+        this->err = error;
+    }
+
+    Result(const T& value) 
+    {
+        this->kind = dtr_res::ok;
+        this->data = value;
+    }
+
+    const E& error() const
+    {
+        assert(this->kind == dtr_res::err);
+        return this->err;
+    }
+
+    const T& value() const 
+    {
+        assert(this->kind == dtr_res::ok);
+        return this->data;
+    }
+
+    Option<E> remap_to_err()
+    {
+        if(this->kind == dtr_res::err)
+        {
+            return err;
+        }
+
+        return option::none;
+    }
+
+    explicit operator bool() const
+    {
+        return this->kind != dtr_res::err;
+    }
+
+    union
+    {
+        T data = {};
+        E err;
+    };
+
+    dtr_res kind;
+};
+
+template<typename T, typename E>
+inline bool operator!(const Result<T,E>& res)
+{
+    return res.kind == dtr_res::err;
+}
+
+template<typename T, typename E>
+inline const T operator*(const Result<T,E>& res)
+{
+    return res.value();
+}
+
+template<typename T, typename E>
+inline T operator*(Result<T,E>& res)
+{
+    return res.value();
+}
+
 
 // dynamic string
 using StringBuffer = Array<char>;
