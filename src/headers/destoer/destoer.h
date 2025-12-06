@@ -571,14 +571,10 @@ std::string remove_ext(const std::string &str);
 std::string get_save_file_name(const std::string &filename);
 
 
-#ifndef _MSC_VER
-__attribute__((noreturn))
-#endif
+[[noreturn]]
 void unimplemented(const char *fmt, ...);
 
-#ifndef _MSC_VER
-__attribute__((noreturn))
-#endif
+[[noreturn]]
 void crash_and_burn(const char *fmt, ...);
 void log(b32 cond,const char *fmt, ...);
 
