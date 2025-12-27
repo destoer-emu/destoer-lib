@@ -122,6 +122,58 @@ struct Array
     u32 capacity = 0;
 };
 
+template<typename T>
+struct Span
+{
+    T& operator [] (u32 i) 
+    {
+        return this->data[i];
+    }
+
+    const T& operator [] (u32 i) const
+    {
+        return this->data[i];
+    }
+
+    T* begin() 
+    {
+        return data;
+    }
+
+    T* end()
+    {
+        return data + size;
+    }
+
+    const T* begin() const
+    {
+        return data;
+    }
+
+    const T* end() const
+    {
+        return data + size;
+    }
+
+
+    explicit operator bool() const
+    {
+        return size != 0;
+    }
+
+    const T* data = nullptr;
+    u32 size = 0;
+};
+
+template<typename T>
+Span<T> make_span(const Array<T>& array, u32 offset)
+{
+    Span<T> span;
+    span.data = &array.data[offset];
+    span.size = (array.size - offset) / sizeof(T);
+
+    return span;
+}
 
 
 struct BitSet
