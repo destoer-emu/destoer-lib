@@ -170,7 +170,7 @@ Span<T> make_span(const Array<T>& array, u32 offset)
 {
     Span<T> span;
     span.data = &array.data[offset];
-    span.size = (array.size - offset) / sizeof(T);
+    span.size = count(array) - offset;
 
     return span;
 }
@@ -214,7 +214,6 @@ struct [[nodiscard]] Option
         assert(this->res == dtr_res::ok);
         return this->data;
     }
-
 
     explicit operator bool() const
     {
@@ -337,6 +336,17 @@ inline T operator*(Result<T,E>& res)
     return res.value();
 }
 
+
+template<typename T,typename E>
+Result<T,E> error_or(const Option<E>& option, T& value)
+{
+    if(!option)
+    {
+        return value;
+    }
+
+    return *option;
+}
 
 // dynamic string
 using StringBuffer = Array<char>;
