@@ -125,11 +125,6 @@ struct Array
 template<typename T>
 struct Span
 {
-    T& operator [] (u32 i) 
-    {
-        return this->data[i];
-    }
-
     const T& operator [] (u32 i) const
     {
         return this->data[i];
@@ -176,6 +171,27 @@ Span<T> make_span(const Array<T>& array, u32 offset)
 }
 
 
+template<typename T>
+Span<T> make_span(const Span<T>& other, u32 offset)
+{
+    Span<T> span;
+    span.data = &other.data[offset];
+    span.size = other.size - offset;
+
+    return span;
+}
+
+
+template<typename T>
+Span<T> clip_span(const Span<T>& other, u32 size)
+{
+    Span<T> span;
+    span.data = other.data;
+    span.size = size;
+
+    return span;
+}
+
 struct BitSet
 {
     u64 count = 0;
@@ -202,6 +218,7 @@ struct [[nodiscard]] Option
 
     Option(option value) {
         UNUSED(value);
+        this->data = {};
         this->res = dtr_res::err;
     }
 

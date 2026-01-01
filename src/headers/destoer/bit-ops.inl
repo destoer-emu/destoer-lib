@@ -158,7 +158,7 @@ inline u32 rotr(u32 n, u32 c)
 }
 
 
-// this checks if the msb (sign) changes to something it shouldunt
+// this checks if the msb (sign) changes to something it shouldn't
 // during arithmetic
 template <typename T,typename U, typename X>
 inline b32 did_overflow(T v1, U v2, X ans)
@@ -169,7 +169,7 @@ inline b32 did_overflow(T v1, U v2, X ans)
 
 
 /*
-thanks yaed for suggesting use of compilier builtins
+thanks yaed for suggesting use of compiler builtins
 */
 
 template<typename T>
