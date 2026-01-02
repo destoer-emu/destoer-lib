@@ -90,6 +90,13 @@ void push_string(StringBuffer& buffer, const String &str)
     buffer.size += str.size;
 }
 
+void push_char(StringBuffer& buffer, char c)
+{
+    reserve(buffer,sizeof(c));
+    buffer.data[buffer.size++] = c;
+}
+
+
 void push_string(ArenaAllocator& allocator, StringBuffer& buffer, const String &str)
 {
     reserve_arena(allocator,buffer,str.size);

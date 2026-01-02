@@ -7,7 +7,7 @@ Arena make_arena(u32 size)
 
     arena.len = 0;
     arena.size = size;
-    arena.buf = malloc(size);
+    arena.buf = calloc(1,size);
 
     assert(arena.buf);
 

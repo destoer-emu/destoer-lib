@@ -161,33 +161,21 @@ struct Span
 };
 
 template<typename T>
-Span<T> make_span(const Array<T>& array, u32 offset)
+Span<T> make_span(const Array<T>& array, u32 start, u32 len)
 {
     Span<T> span;
-    span.data = &array.data[offset];
-    span.size = count(array) - offset;
+    span.data = &array.data[start];
+    span.size = len;
 
     return span;
 }
 
-
 template<typename T>
-Span<T> make_span(const Span<T>& other, u32 offset)
+Span<T> make_span(const Span<T>& other, u32 start, u32 len)
 {
     Span<T> span;
-    span.data = &other.data[offset];
-    span.size = other.size - offset;
-
-    return span;
-}
-
-
-template<typename T>
-Span<T> clip_span(const Span<T>& other, u32 size)
-{
-    Span<T> span;
-    span.data = other.data;
-    span.size = size;
+    span.data = &other.data[start];
+    span.size = len;
 
     return span;
 }
@@ -435,6 +423,8 @@ s32 string_find(const String& str, const String& search);
 bool string_contains(const String& str, const String& search);
 
 void push_char(ArenaAllocator& allocator, StringBuffer &buffer, char v);
+void push_char(StringBuffer& buffer, char c);
+
 void push_string(StringBuffer& buffer, const String &str);
 void push_string(ArenaAllocator& allocator, StringBuffer& buffer, const String &str);
 
