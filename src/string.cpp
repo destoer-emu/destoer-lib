@@ -22,7 +22,7 @@ String string_offset(const String& str, u32 offset)
     String out;
 
     out.buf = &str.buf[offset];
-    out.size -= offset;
+    out.size = str.size - offset;
 
     return out;
 }
@@ -237,4 +237,15 @@ String extract_path(const String& filename)
 
     // otherwhise just return nothing
     return make_static_string("",0);
+}
+
+bool string_ends_with(const String& str, const String& needle)
+{
+    if(str.size < needle.size)
+    {
+        return false;
+    }
+
+    const auto slice = string_offset(str,str.size - needle.size);
+    return slice == needle;
 }

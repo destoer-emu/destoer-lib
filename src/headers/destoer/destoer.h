@@ -433,6 +433,8 @@ String make_string(ArenaAllocator& allocator,const char* str, u32 size);
 String make_string(ArenaAllocator& allocator,const char* str);
 String make_static_string(const char* str, u32 size);
 
+bool string_ends_with(const String& str, const String& needle);
+
 u32 hash_slot(u32 size, const String& name);
 
 String copy_string(ArenaAllocator& allocator, const String& in);
