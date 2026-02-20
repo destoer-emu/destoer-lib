@@ -162,7 +162,7 @@ struct Span
 };
 
 template<typename T>
-Span<T> make_span(const T* data, u32 start, u32 len)
+Span<T> make_span(T* data, u32 start, u32 len)
 {
     Span<T> span;
     span.data = &data[start];
@@ -170,6 +170,17 @@ Span<T> make_span(const T* data, u32 start, u32 len)
 
     return span;
 }
+
+template<typename T>
+Span<T> make_span(const Span<T>& other, u32 start, u32 len)
+{
+    Span<T> span;
+    span.data = &other.data[start];
+    span.size = len;
+
+    return span;
+}
+
 
 
 template<typename T>
@@ -243,6 +254,16 @@ ConstSpan<T> make_const_span(const Array<T>& array, u32 start, u32 len)
 
 template<typename T>
 ConstSpan<T> make_const_span(const ConstSpan<T>& other, u32 start, u32 len)
+{
+    ConstSpan<T> span;
+    span.data = &other.data[start];
+    span.size = len;
+
+    return span;
+}
+
+template<typename T>
+ConstSpan<T> make_const_span(const Span<T>& other, u32 start, u32 len)
 {
     ConstSpan<T> span;
     span.data = &other.data[start];
