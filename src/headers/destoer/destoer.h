@@ -193,8 +193,8 @@ struct ConstSpan
 
     ConstSpan(const Span<T>& span)
     {
-        this.data = span.data;
-        this.size = span.size;
+        this->data = span.data;
+        this->size = span.size;
     }
 
     const T& operator [] (u32 i) const
