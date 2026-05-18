@@ -26,6 +26,17 @@ inline void destroy_set(Set<T>& set)
 }
 
 template<typename T>
+inline void clear_set(Set<T>& set)
+{
+    for(auto& bucket : set.buf)
+    {
+        clear_arr(bucket);
+    }    
+
+    set.size = 0;
+}
+
+template<typename T>
 inline b32 contains(Set<T>& set, const T& key)
 {
     const u32 slot = hash_slot(count(set.buf),key);
