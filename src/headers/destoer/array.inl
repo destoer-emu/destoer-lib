@@ -69,6 +69,13 @@ inline Array<T> copy_array(const Array<T>& src)
 }
 
 template<typename T>
+void replace_array(Array<T>& dst, const Array<T>& src)
+{
+    memcpy(dst.data,src.data,src.size);
+}
+
+
+template<typename T>
 inline void remove_unordered_key(Array<T>& arr, const T& key)
 {
     // scan for key

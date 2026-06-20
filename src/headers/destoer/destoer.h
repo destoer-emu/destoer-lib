@@ -172,6 +172,16 @@ Span<T> make_span(T* data, u32 start, u32 len)
 }
 
 template<typename T>
+Span<T> make_span(const Array<T>& array, u32 start, u32 len)
+{
+    Span<T> span;
+    span.data = &array.data[start];
+    span.size = len;
+
+    return span;
+}
+
+template<typename T>
 Span<T> make_span(const Span<T>& other, u32 start, u32 len)
 {
     Span<T> span;
