@@ -470,9 +470,9 @@ String make_static_string(const char* str, u32 len);
 // NOTE: this is designed as a 'view' string it never owns the memory it points to to
 struct String
 {
-    String() {}
+    String() = default;
 
-    constexpr String(const char* str) 
+    constexpr String(const char* str) : buf(str), size(0)
     {
         buf = str;
 
@@ -503,11 +503,11 @@ struct String
     }
 
 
-    const char* buf = nullptr;
+    const char* buf;
 
     // NOTE: there is a extra null term on the buf
     // after the size of C string compat
-    u32 size = 0;
+    u32 size;
 };
 
     
