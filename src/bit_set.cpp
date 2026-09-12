@@ -75,3 +75,40 @@ bool bit_set_difference(BitSet& v1, const BitSet& v2, const BitSet& v3)
 
     return v1.count != start;    
 }
+
+void BitSetIterator::skip_empty_bits(BitSetIterator& iter)
+{
+    b32 done = false;
+
+    while(!done)
+    {
+        u64 entry = iter.bit_set.set[iter.scanned_bits / BITS_PER_ENTRY];
+        const u32 cur_bit = iter.scanned_bits % BITS_PER_ENTRY;
+
+        // unset every bit inclusive of the last one we scanned
+        entry = (entry >> cur_bit) << cur_bit;
+
+        iter.scanned_bits += ffs(entry) - cur_bit;
+
+        if(iter.scanned_bits == iter.bit_set.capacity)
+        {
+            done = true;
+        }
+
+        // If we have actually hit a bit then we are done
+        else if(test_bit_set(iter.bit_set,iter.scanned_bits))
+        {
+            // We need to skip this next time.
+            iter.scanned_bits += 1;
+            done = true;
+        }
+    }
+}
+
+BitSetIterator end_iter(const BitSet& bit_set)
+{
+    BitSetIterator it(bit_set);
+    it.scanned_bits = bit_set.capacity;
+
+    return it;
+}

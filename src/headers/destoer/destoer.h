@@ -282,8 +282,67 @@ ConstSpan<T> make_const_span(const Span<T>& other, u32 start, u32 len)
     return span;
 }
 
+struct BitSet;
+
+struct BitSetIterator
+{
+    void skip_empty_bits(BitSetIterator& iter);
+
+    BitSetIterator(const BitSet& bit_set) : bit_set(bit_set)
+    {
+        skip_empty_bits(*this);
+    }
+
+    const BitSet& bit_set;
+    u32 scanned_bits = 0;
+
+    bool operator==(const BitSetIterator& it) const 
+    {
+        return this->scanned_bits == it.scanned_bits;
+    }
+
+    BitSetIterator& operator++()
+    {
+        skip_empty_bits(*this);
+        return *this;
+    }
+
+    // The slot is always the one we have just scanned.
+    u32 operator*()
+    {
+        return this->scanned_bits - 1;
+    }
+
+    u32 operator*() const
+    {
+        return this->scanned_bits - 1;
+    }
+};
+
+BitSetIterator end_iter(const BitSet& bit_set);
+
 struct BitSet
 {
+    BitSetIterator begin()
+    {
+        return BitSetIterator(*this);
+    }
+
+    BitSetIterator end()
+    {
+        return end_iter(*this);
+    }
+
+    const BitSetIterator begin() const
+    {
+        return BitSetIterator(*this);
+    }
+
+    const BitSetIterator end() const
+    {
+        return end_iter(*this);
+    }
+
     u64 count = 0;
     u64 capacity = 0;
     u64 bits = 0;
