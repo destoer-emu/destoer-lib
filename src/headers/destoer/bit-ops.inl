@@ -8,12 +8,12 @@ inline b32 in_range(T v, T min, T max)
 
 inline u64 set_bit(u64 v, u32 bit)
 {
-    return v | (1 << bit);
+    return v | (1ULL << bit);
 }
 
 inline u64 deset_bit(u64 v, u32 bit)
 {
-    return v & ~(1 << bit);
+    return v & ~(1ULL << bit);
 }
 
 inline b32 is_set(u64 v, u32 bit)
@@ -88,7 +88,7 @@ inline u32 ffs(u64 v)
         return FFS_EMPTY;
     }
 
-    return __builtin_ctz(v);
+    return __builtin_ctzl(v);
 #else
     for(u32 i = 0; i < 64; i++)
     {
@@ -214,7 +214,7 @@ inline b32 ssub_overflow(T v1,T v2)
 #ifdef _MSC_VER
     const auto ans = sv1 - sv2;
     // negate 2nd operand so we can pretend
-    // this is like an additon
+    // this is like an addition
     return did_overflow(sv1,~sv2, ans);
 #else
     return __builtin_sub_overflow(sv1,sv2,&sv1);

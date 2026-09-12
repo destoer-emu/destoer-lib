@@ -285,13 +285,22 @@ ConstSpan<T> make_const_span(const Span<T>& other, u32 start, u32 len)
 struct BitSet
 {
     u64 count = 0;
-    Array<u32> set;
+    u64 capacity = 0;
+    u64 bits = 0;
+    Array<u64> set;
 };
+
+const u32 BITS_PER_ENTRY = sizeof(u64) * 8;
 
 BitSet make_bit_set(u32 bits);
 bool test_bit_set(const BitSet& set,u32 bit);
-void set_bit_set(BitSet& set, u32 bit);
+bool set_bit_set(BitSet& set, u32 bit);
+bool deset_bit_set(BitSet& bit_set, u32 bit);
 void destroy_bit_set(BitSet& bit_set);
+
+// NOTE: These must be the same size
+bool bit_set_union(BitSet& v1, const BitSet& v2);
+bool bit_set_difference(BitSet& v1, const BitSet& v2, const BitSet& v3);
 
 enum class option
 {
