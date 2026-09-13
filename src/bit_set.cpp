@@ -18,6 +18,7 @@ BitSet make_bit_set(u32 bits)
 void clear_bit_set(BitSet& bit_set)
 {
     zero_arr(bit_set.set);
+    bit_set.count = 0;
 }
 
 bool test_bit_set(const BitSet& bit_set,u32 bit)
@@ -57,7 +58,7 @@ bool deset_bit_set(BitSet& bit_set, u32 bit)
     const u32 offset = bit % BITS_PER_ENTRY;
 
     const bool modifed = is_set(bit_set.set[idx],offset);
-    bit_set.count += modifed;
+    bit_set.count -= modifed;
     bit_set.set[idx] = deset_bit(bit_set.set[idx],offset);
 
     return modifed;
@@ -166,6 +167,11 @@ s32 bit_set_first(const BitSet& bit_set)
 
 bool test_bit_set_intersection(const BitSet& v1, const BitSet& v2)
 {
+    if(!v1.count || !v2.count)
+    {
+        return false;
+    }
+
     for(u32 i = 0; i < count(v1.set); i++)
     {
         if(v1.set[i] & v2.set[i])
