@@ -122,7 +122,7 @@ inline u32 fls(u64 v)
         }
     }
 
-    return FFS_EMPTY;
+    return FLS_EMPTY;
 #endif
 }
 

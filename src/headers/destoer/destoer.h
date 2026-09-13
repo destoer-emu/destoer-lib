@@ -352,10 +352,19 @@ struct BitSet
 const u32 BITS_PER_ENTRY = sizeof(u64) * 8;
 
 BitSet make_bit_set(u32 bits);
-bool test_bit_set(const BitSet& set,u32 bit);
-bool set_bit_set(BitSet& set, u32 bit);
-bool deset_bit_set(BitSet& bit_set, u32 bit);
 void destroy_bit_set(BitSet& bit_set);
+void clear_bit_set(BitSet& bit_set);
+void grow_bit_set(BitSet& bit_set, u32 bits);
+
+bool test_bit_set(const BitSet& set,u32 bit);
+bool test_bit_set_intersection(const BitSet& v1, const BitSet& v2);
+
+bool set_bit_set(BitSet& set, u32 bit);
+bool set_bit_set_grow(BitSet& bit_set, u32 bit);
+bool deset_bit_set(BitSet& bit_set, u32 bit);
+
+s32 bit_set_last(const BitSet& bit_set);
+s32 bit_set_first(const BitSet& bit_set);
 
 // NOTE: These must be the same size
 bool bit_set_union(BitSet& v1, const BitSet& v2);
