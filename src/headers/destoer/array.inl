@@ -117,6 +117,12 @@ inline void resize(Array<T> &arr, u32 len)
 }
 
 template<typename T>
+inline void resize_end(Array<T> &arr, u32 len)
+{
+    return resize(arr, count(arr) + len);
+}
+
+template<typename T>
 inline void zero_arr(Array<T>& arr)
 {
     memset(arr.data,0,arr.capacity);

@@ -277,6 +277,12 @@ inline u64 max(u64 v1, u64 v2)
     return v1 > v2? v1 : v2;
 }
 
+inline u64 min(u64 v1, u64 v2)
+{
+    return v1 < v2? v1 : v2;
+}
+
+
 inline constexpr u64 bit_ceil(u64 v)
 {
     u64 ans = 1;

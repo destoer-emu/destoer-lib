@@ -99,6 +99,11 @@ bool bit_set_difference(BitSet& v1, const BitSet& v2, const BitSet& v3)
 
 void BitSetIterator::skip_empty_bits(BitSetIterator& iter)
 {
+    if(iter.bit_set.capacity == 0)
+    {
+        return;
+    }
+
     b32 done = false;
 
     while(!done)
