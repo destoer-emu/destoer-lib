@@ -282,6 +282,14 @@ ConstSpan<T> make_const_span(const Span<T>& other, u32 start, u32 len)
     return span;
 }
 
+template<typename T>
+void copy_const_span(Span<T>& span, const ConstSpan<T>& other)
+{
+    memcpy(span.data,other.data,other.size * sizeof(T));
+    span.size = other.size;
+}
+
+
 struct BitSet;
 
 struct BitSetIterator
